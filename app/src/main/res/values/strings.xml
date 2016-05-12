@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MyTODO</string>
+    <string name="todotext">TodoText</string>
+    <string name="expiredate">expireDate</string>
+    <string name="donedate">doneDate</string>
+    <string name="btn_add_todo_text">Добавить запись</string>
+    <string name="ok_button">Ok</string>
+    <string name="add_todo_dialog_title">Добавить новую запись</string>
+    <string name="cancel_button">Cancel</string>
+</resources>
