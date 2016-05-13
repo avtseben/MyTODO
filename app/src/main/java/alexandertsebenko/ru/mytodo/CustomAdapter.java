@@ -6,13 +6,11 @@ package alexandertsebenko.ru.mytodo;
     import android.view.LayoutInflater;
     import android.view.View;
     import android.view.ViewGroup;
-    import android.widget.BaseAdapter;
     import android.widget.ImageView;
     import android.widget.TextView;
 
     import java.text.SimpleDateFormat;
     import java.util.ArrayList;
-    import java.util.Date;
 
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.TodoHolder> {
@@ -32,11 +30,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.TodoHolder
 
     @Override
     public void onBindViewHolder(TodoHolder holder, int position) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd_HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         TodoInstance todoItem = arrayList.get(position);
         holder.tvTODO.setText(todoItem.getTodoText());
         holder.tvExpDate.setText(sdf.format(todoItem.getExpireDate()));
-        holder.tvDonDate.setText(sdf.format(todoItem.getDoneDate()));
+        //Если дата "выполнено" не установлена (значение -1) то мы ее не отрисовываем
+        if(todoItem.getDoneDate() == -1)
+            holder.tvDonDate.setVisibility(View.INVISIBLE);
+        else
+            holder.tvDonDate.setText(sdf.format(todoItem.getDoneDate()));
         Context context = holder.ivAvatar.getContext();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             holder.ivAvatar.setImageDrawable(context.getResources().getDrawable(R.drawable.clipboard_text, context.getTheme()));
