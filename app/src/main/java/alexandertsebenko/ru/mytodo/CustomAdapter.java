@@ -1,6 +1,7 @@
 package alexandertsebenko.ru.mytodo;
 
     import android.content.Context;
+    import android.graphics.Color;
     import android.os.Build;
     import android.support.v7.widget.RecyclerView;
     import android.view.LayoutInflater;
@@ -39,6 +40,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.TodoHolder
             holder.tvDonDate.setVisibility(View.INVISIBLE);
         else
             holder.tvDonDate.setText(sdf.format(todoItem.getDoneDate()));
+        //Устанавливаем цвет записи в зависимости от статуса выполненности
+        if(todoItem.isDone())
+            holder.itemView.setBackgroundColor(Color.GREEN);
+        else
+            holder.itemView.setBackgroundColor(Color.RED);
         Context context = holder.ivAvatar.getContext();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             holder.ivAvatar.setImageDrawable(context.getResources().getDrawable(R.drawable.clipboard_text, context.getTheme()));

@@ -11,4 +11,6 @@
     <string name="custom_dialog_tv_date">Дата выполнения:</string>
     <string name="custom_dialog_todo_hint">Что планируем..</string>
     <string name="custom_dialog_btn_set_date">Установить</string>
+    <string name="menu_item_delete_all_records">Удалить все записи</string>
+    <string name="toast_all_records_deleted">Вся информация стёрта!</string>
 </resources>

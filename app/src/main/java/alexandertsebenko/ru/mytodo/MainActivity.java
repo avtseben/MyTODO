@@ -1,24 +1,26 @@
 package alexandertsebenko.ru.mytodo;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private TodosDataSource datasource;
     private RecyclerView recyclerView;
@@ -28,15 +30,12 @@ public class MainActivity extends Activity {
     long unixTime = System.currentTimeMillis();
     String textOfSelectTodoInstance;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.rv);
         fillArrayList();
-
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -80,6 +79,7 @@ public class MainActivity extends Activity {
         super.onPause();
     }
 //TODO сделать невозможным добавления пустой записи todo
+    //Диалог добавления записи
     public void addTodoDialog(final View view) {
 
         final Calendar c = Calendar.getInstance();
@@ -143,6 +143,7 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onDateSet(DatePicker view, int year,int monthOfYear, int dayOfMonth) {
+                        //Конвертируем дату в unixTime
                         Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
                         unixTime = calendar.getTimeInMillis();
                         txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
@@ -173,6 +174,24 @@ public class MainActivity extends Activity {
         }
 
         return super.onContextItemSelected(item);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 1, 2, R.string.menu_item_delete_all_records);
+       return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+      switch (item.getItemId()){
+            case 1:
+                datasource.deleteAllTodoInstance();
+                refreshRecycleView();
+                Toast.makeText(MainActivity.this, R.string.toast_all_records_deleted, Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

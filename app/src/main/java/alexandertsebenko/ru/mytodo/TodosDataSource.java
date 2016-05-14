@@ -69,6 +69,11 @@ public class TodosDataSource {
         db.delete(MySQLiteHelper.TABLE_TODOS, MySQLiteHelper.COLUMN_ID
                 + " = " + _id, null);
     }
+    public void deleteAllTodoInstance() {
+        System.out.println("All TodoInstance deleted");
+        db.delete(MySQLiteHelper.TABLE_TODOS,
+                null, null);
+    }
     public void updateSetDoneTodoInstanceByText(String todoText, long currentUnixTime) {
         ContentValues updateValues = new ContentValues();
         updateValues.put(MySQLiteHelper.COLUMN_DONE, true);
