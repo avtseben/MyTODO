@@ -7,10 +7,14 @@ import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,6 +28,8 @@ public class MainActivity extends Activity {
     private int mYear, mMonth, mDay;
     TextView txtDate;
     long unixTime = System.currentTimeMillis();
+    String textOfSelectTodoInstance;
+
 
 
     @Override
@@ -37,26 +43,28 @@ public class MainActivity extends Activity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(new CustomAdapter(values));
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(MainActivity.this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                //Toast.makeText(MainActivity.this, "SHORT CLICK", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                //TODO нужно переделать чтобы holder хранил ID записи заметки чтобы удалять,редактировать только одну заметку
+                //Запоминаем текст заметки из выбранного item
+                CustomAdapter.TodoHolder holder = (CustomAdapter.TodoHolder) recyclerView.findViewHolderForAdapterPosition(position);
+                textOfSelectTodoInstance = (String) holder.tvTODO.getText();
+                //Toast.makeText(MainActivity.this, textOfSelectTodoInstance, Toast.LENGTH_SHORT).show();
+                registerForContextMenu(view);
+            }
+        }));
 
     }
-    /*public void onClick(View view) {
-        @SuppressWarnings("unchecked")
-        Intent intentBack = new Intent(this,AddTodoInstance.class);
-        switch (view.getId()) {
-            case R.id.button_add_room:
-                startActivity(intentBack);
-                break;
-        }
+    public void refreshRecycleView() {
+        values = datasource.getAllTodoInstances();
+        recyclerView.setAdapter(new CustomAdapter(values));
     }
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        TodoInstance item = (TodoInstance) getListAdapter().getItem(position);
-        Intent intent = new Intent(this, UnsortedNote.class);
-        Bundle b = new Bundle();
-        b.putString("Note", item.getTodoInstance());
-        b.putLong("ID", item.getId());
-        intent.putExtras(b);
-        startActivity(intent);
-    }*/
     public void fillArrayList() {
         datasource = new TodosDataSource(this);
         datasource.open();
@@ -73,7 +81,6 @@ public class MainActivity extends Activity {
         datasource.close();
         super.onPause();
     }
-//TODO добавить возможность удаления заданий по длительномы нажатию
 //TODO сделать невозможным добавления пустой записи todo
     public void addTodoDialog(final View view) {
 
@@ -96,8 +103,7 @@ public class MainActivity extends Activity {
                         String todoText = editTodoText.getText().toString();
                         datasource.createTodoInstance(todoText,unixTime,-1,false);
                         //Повторно запрашиваем данные и обновляем recycleView
-                        values = datasource.getAllTodoInstances();
-                        recyclerView.setAdapter(new CustomAdapter(values));
+                        refreshRecycleView();
                     }
                 })
                 .setNeutralButton(getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
@@ -122,4 +128,28 @@ public class MainActivity extends Activity {
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        getMenuInflater().inflate(R.menu.edit_context_menu, menu);
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_edit_todo:
+                Toast.makeText(MainActivity.this, "EDIT", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_set_done:
+                Toast.makeText(MainActivity.this, "SET DONE", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_delete_todo:
+                datasource.deleteTodoInstanceByText("'" + textOfSelectTodoInstance + "'");
+                refreshRecycleView();
+                Toast.makeText(MainActivity.this, "DELETE", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
 }

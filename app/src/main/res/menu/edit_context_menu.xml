@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Редактировать"
+        android:id="@+id/menu_edit_todo"/>
+    <item android:title="Пометить выполненным"
+        android:id="@+id/menu_set_done"/>
+    <item android:title="Удалить"
+        android:id="@+id/menu_delete_todo"/>
+</menu>
