@@ -10,11 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -113,6 +111,31 @@ public class MainActivity extends Activity {
                 })
                 .show();
     }
+    //Диалог редактирования записи
+    public void editTodoDialog() {
+
+        final View inflate = getLayoutInflater().inflate(R.layout.edit_todo_text_dialog, null);
+        final EditText editTodoText = (EditText) inflate.findViewById(R.id.et_edit_todo);
+        editTodoText.setText(textOfSelectTodoInstance);
+
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle(getString(R.string.add_edit_todo_dialog_title))
+                .setView(inflate)
+                .setPositiveButton(getString(R.string.ok_button), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newTodoText = editTodoText.getText().toString();
+                        datasource.updateSetTextTodoInstanceByText(textOfSelectTodoInstance, newTodoText);
+                        refreshRecycleView();
+                    }
+                })
+                .setNeutralButton(getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .show();
+    }
     public void datePicker(View view) {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
@@ -137,17 +160,15 @@ public class MainActivity extends Activity {
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_edit_todo:
-                Toast.makeText(MainActivity.this, "EDIT", Toast.LENGTH_SHORT).show();
+                editTodoDialog();
                 break;
             case R.id.menu_set_done:
                 datasource.updateSetDoneTodoInstanceByText(textOfSelectTodoInstance, System.currentTimeMillis());
                 refreshRecycleView();
-                Toast.makeText(MainActivity.this, "SET DONE", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_delete_todo:
                 datasource.deleteTodoInstanceByText("'" + textOfSelectTodoInstance + "'");
                 refreshRecycleView();
-                Toast.makeText(MainActivity.this, "DELETE", Toast.LENGTH_SHORT).show();
                 break;
         }
 

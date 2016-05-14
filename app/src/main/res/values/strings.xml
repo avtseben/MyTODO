@@ -6,6 +6,7 @@
     <string name="btn_add_todo_text">Добавить запись</string>
     <string name="ok_button">Ok</string>
     <string name="add_todo_dialog_title">Добавить новую запись</string>
+    <string name="add_edit_todo_dialog_title">Редактировать запись</string>
     <string name="cancel_button">Cancel</string>
     <string name="custom_dialog_tv_date">Дата выполнения:</string>
     <string name="custom_dialog_todo_hint">Что планируем..</string>

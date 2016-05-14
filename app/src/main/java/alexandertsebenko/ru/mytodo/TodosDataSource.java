@@ -77,6 +77,13 @@ public class TodosDataSource {
                   MySQLiteHelper.COLUMN_TODO_TEXT + " = '" + todoText + "'",
                   null);
     }
+    public void updateSetTextTodoInstanceByText(String todoText, String newTodoText) {
+        ContentValues updateValues = new ContentValues();
+        updateValues.put(MySQLiteHelper.COLUMN_TODO_TEXT, newTodoText);
+        db.update(MySQLiteHelper.TABLE_TODOS, updateValues,
+                MySQLiteHelper.COLUMN_TODO_TEXT + " = '" + todoText + "'",
+                null);
+    }
     public ArrayList<TodoInstance> getAllTodoInstances() {
         ArrayList<TodoInstance> todoTexts = new ArrayList<TodoInstance>();
 
