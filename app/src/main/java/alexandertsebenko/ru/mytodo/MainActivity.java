@@ -140,6 +140,8 @@ public class MainActivity extends Activity {
                 Toast.makeText(MainActivity.this, "EDIT", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_set_done:
+                datasource.updateSetDoneTodoInstanceByText(textOfSelectTodoInstance, System.currentTimeMillis());
+                refreshRecycleView();
                 Toast.makeText(MainActivity.this, "SET DONE", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_delete_todo:
